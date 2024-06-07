@@ -1,0 +1,5 @@
+#Ignore output directories
+exports/
+
+#ignore configuration files
+config.ini
