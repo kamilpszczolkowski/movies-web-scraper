@@ -5,7 +5,7 @@ import configparser
 import Query_strings
 
 # In next step implement context manager!
-class GCP_SQL_handler:
+class GCP_SQL_handler():
     def __init__(self):
         config = configparser.ConfigParser()
         config.read("config.ini")
@@ -34,6 +34,12 @@ class GCP_SQL_handler:
             "mysql+pymysql://",
             creator=getconn,
         )
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        self.close_connection()
 
     def close_connection(self):
         print("Closing connection")
@@ -68,7 +74,6 @@ class GCP_SQL_handler:
                         parameters={"genre": genre}  
                     )
 
-
                 movie_id = db_conn.execute(sqlalchemy.text(Query_strings.select_last_id)).fetchone()[0]
 
                 for genre in movie_genres:
@@ -79,4 +84,3 @@ class GCP_SQL_handler:
                     )
 
             db_conn.commit()
-

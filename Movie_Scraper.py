@@ -37,7 +37,7 @@ def scrape_movie_data(driver):
             print(f"Element with ID '{element_id}' not found, skipping")
     
     # Scroll the page to the last element to load them all
-    for position in range(5, 50):
+    for position in range(5, 25):
         Position_element = driver.find_element(By.ID, str(position))
         driver.execute_script("arguments[0].scrollIntoView(true);", Position_element)
 
@@ -76,12 +76,12 @@ def save_movie_data(movies, choice):
             writer.writerows([movie.values() for movie in movies])
     elif choice == 2:
         print("Writing data with MySQL.connector")
-        MySQL_handler().insert_movie_data(movies)
+        with MySQL_handler() as SQL_Connector:
+            SQL_Connector.insert_movie_data(movies)
     elif choice == 3:
         print("Writing data with GCP MySQL connector")
-        SQL_Connector = GCP_SQL_handler()
-        SQL_Connector.insert_movie_data(movies)
-        SQL_Connector.close_connection()
+        with GCP_SQL_handler() as SQL_Connector:
+            SQL_Connector.insert_movie_data(movies)
 
 if __name__ == "__main__":
     driver = setup_webdriver()

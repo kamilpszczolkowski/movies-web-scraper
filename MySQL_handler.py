@@ -4,7 +4,7 @@ from mysql.connector import errorcode
 
 import Query_strings
 
-class MySQL_handler:
+class MySQL_handler():
     """Creates connection to the MySQL server with mysql.connector.
        Database connection is configured in config.ini file - within mysql_connector section.
     """
@@ -36,7 +36,13 @@ class MySQL_handler:
                 print("Database {} created succesfully.".format(db_name))
                 self.__cnx__.database = db_name
  
-    def __del__(self):
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        self.close_connection()
+
+    def close_connection(self):
         print("Closing connection")
         self.__cursor__.close()
         self.__cnx__.close()
