@@ -86,6 +86,7 @@ def save_movie_data(movies, choice):
 if __name__ == "__main__":
     driver = setup_webdriver()
     movies = scrape_movie_data(driver)
+    driver.quit()
 
     while True:
         choice = input("Select the data source:\n 1) CSV file\n 2) MySQL.connector server\n 3) GCP MySQL server\n")
