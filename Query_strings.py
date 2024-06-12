@@ -1,14 +1,14 @@
 TABLES = {}
 
 TABLES['genres'] = (
-    "CREATE TABLE IF NOT EXISTS `genres` ("
+    "CREATE TABLE `genres` ("
     "genre varchar(30) NOT NULL,"
     "PRIMARY KEY (`genre`)"
     ")"
 )
 
 TABLES['movies'] = (
-    "CREATE TABLE IF NOT EXISTS `movies` ("
+    "CREATE TABLE `movies` ("
     "movie_id int(11) NOT NULL AUTO_INCREMENT,"
     "name varchar(100) NOT NULL,"
     "rating float(3, 2),"
@@ -17,7 +17,7 @@ TABLES['movies'] = (
 )
 
 TABLES['movie_genres'] = (
-    "CREATE TABLE IF NOT EXISTS `movie_genres` ("
+    "CREATE TABLE `movie_genres` ("
     "movie_id int(11) NOT NULL,"
     "genre varchar(30) NOT NULL,"
     "PRIMARY KEY (`movie_id`, `genre`),"
@@ -26,7 +26,7 @@ TABLES['movie_genres'] = (
     ")"
 )
 
-create_database = ("CREATE DATABASE {} DEFAULT CHARACTER SET 'UTF8'")
+create_database = ("CREATE DATABASE (%s) DEFAULT CHARACTER SET 'UTF8'")
 
 add_movie = ("INSERT INTO movies "
              "(name, rating) "
@@ -36,9 +36,6 @@ add_genre =  ("INSERT INTO genres (genre) "
               "SELECT %s WHERE NOT EXISTS ( "
               "SELECT 1 FROM genres WHERE genre = %s);")
 
-select_movie_id = ("SELECT movie_id FROM movies "
-                   "WHERE name = (%s);")
-    
 add_movie_genre = ("INSERT INTO movie_genres "
                    "(movie_id, genre) "
                    "VALUES (%s, %s)")

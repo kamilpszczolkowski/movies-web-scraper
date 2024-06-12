@@ -3,6 +3,8 @@ exports/
 
 #ignore configuration files
 config.ini
+.editorconfig
 
 #ignore bytecode-compiled python files
 __pycache__
+
