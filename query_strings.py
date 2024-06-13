@@ -2,8 +2,9 @@ TABLES = {}
 
 TABLES['genres'] = (
     "CREATE TABLE `genres` ("
-    "genre varchar(30) NOT NULL,"
-    "PRIMARY KEY (`genre`)"
+    "genre_id int(11) NOT NULL AUTO_INCREMENT,"
+    "name varchar(30) NOT NULL,"
+    "PRIMARY KEY (`genre_id`)"
     ")"
 )
 
@@ -19,10 +20,10 @@ TABLES['movies'] = (
 TABLES['movie_genres'] = (
     "CREATE TABLE `movie_genres` ("
     "movie_id int(11) NOT NULL,"
-    "genre varchar(30) NOT NULL,"
-    "PRIMARY KEY (`movie_id`, `genre`),"
+    "genre_id int(11) NOT NULL,"
+    "PRIMARY KEY (`movie_id`, `genre_id`),"
     "FOREIGN KEY (`movie_id`) REFERENCES `movies` (`movie_id`) ON DELETE CASCADE,"
-    "FOREIGN KEY (`genre`) REFERENCES `genres` (`genre`) ON DELETE CASCADE"
+    "FOREIGN KEY (`genre_id`) REFERENCES `genres` (`genre_id`) ON DELETE CASCADE"
     ")"
 )
 
@@ -32,13 +33,17 @@ add_movie = ("INSERT INTO movies "
              "(name, rating) "
              "VALUES (%s, %s)")
 
-add_genre =  ("INSERT INTO genres (genre) "
+add_genre =  ("INSERT INTO genres (name) "
               "SELECT %s WHERE NOT EXISTS ( "
-              "SELECT 1 FROM genres WHERE genre = %s);")
+              "SELECT 1 FROM genres WHERE name = %s);")
 
 add_movie_genre = ("INSERT INTO movie_genres "
-                   "(movie_id, genre) "
-                   "VALUES (%s, %s)")
+                   "(movie_id, genre_id) "
+                   "VALUES (%s, %s);")
+
+select_movie_genre_id = ("SELECT genre_id " 
+                         "FROM genres "
+                         "WHERE name = (%s);")
 
 select_last_id = ("SELECT LAST_INSERT_ID()")
 
