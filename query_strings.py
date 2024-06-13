@@ -45,8 +45,6 @@ select_movie_genre_id = ("SELECT genre_id "
                          "FROM genres "
                          "WHERE name = (%s);")
 
-select_last_id = ("SELECT LAST_INSERT_ID()")
-
 select_movies = ('SELECT * FROM movies ORDER BY rating DESC;')
 
 select_movies_per_category = (
