@@ -63,10 +63,14 @@ add_movie_gcp = ("INSERT INTO movies "
              "(name, rating) "
              "VALUES (:name, :rating)")
 
-add_genre_gcp =  ("INSERT INTO genres (genre) "
+add_genre_gcp =  ("INSERT INTO genres (name) "
                   "SELECT :genre WHERE NOT EXISTS ( "
-                  "SELECT 1 FROM genres WHERE genre = :genre);")
+                  "SELECT 1 FROM genres WHERE name = :genre);")
 
 add_movie_genre_gcp = ("INSERT INTO movie_genres "
-                   "(movie_id, genre) "
-                   "VALUES (:movie_id, :genre)")
+                   "(movie_id, genre_id) "
+                   "VALUES (:movie_id, :genre_id)")
+
+select_movie_genre_id_gcp = ("SELECT genre_id " 
+                         "FROM genres "
+                         "WHERE name = (:name);")
