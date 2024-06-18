@@ -46,7 +46,7 @@ def scrape_movie_data(driver):
         print(err.msg)
 
     # Scroll the page to the last element to load them all
-    movies_qty = 50
+    movies_qty = 500
     for position in range(5, movies_qty):
         Position_element = driver.find_element(By.ID, str(position))
         driver.execute_script(
