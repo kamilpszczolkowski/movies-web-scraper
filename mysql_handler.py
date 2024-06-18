@@ -3,7 +3,7 @@ import configparser
 from mysql.connector import connect, Error, errorcode
 
 from query_strings import add_movie, add_genre, add_movie_genre
-from query_strings import create_database, TABLES
+from query_strings import select_movie_genre_id, create_database, TABLES
 
 class MySQLHandler():
     def __init__(self):
@@ -54,13 +54,18 @@ class MySQLHandler():
 
             for genre in movie_genres:    
                 try:
-                    self._cursor.execute(
-                        add_genre, 
-                        (genre, genre)
-                    )
+                    self._cursor.execute(add_genre, (genre, genre))
+                    genre_id = self._cursor.lastrowid
+
+                    # If lastrowid is 0 - new genre wasn't added, it's
+                    # necessary to find already existing id of a genre
+                    if genre_id == 0:
+                        self._cursor.execute(select_movie_genre_id, (genre, ))
+                        genre_id = self._cursor.fetchone()[0]
+
                     self._cursor.execute(
                         add_movie_genre, 
-                        (movie_id, genre)
+                        (movie_id, genre_id)
                     )
                 except Error as err:
                     if err.errno != errorcode.ER_DUP_ENTRY:

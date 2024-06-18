@@ -5,7 +5,7 @@ from google.cloud.sql.connector import Connector
 import sqlalchemy
 
 from query_strings import add_movie_gcp, add_genre_gcp, add_movie_genre_gcp
-from query_strings import TABLES
+from query_strings import select_movie_genre_id_gcp, TABLES
 
 
 class GCPSQLHandler():
@@ -64,13 +64,23 @@ class GCPSQLHandler():
                 movie_id = result.lastrowid
 
                 for genre in movie_genres:   
-                    db_conn.execute(
+                    result = db_conn.execute(
                         sqlalchemy.text(add_genre_gcp),
                         parameters={"genre": genre}  
                     )
+                    genre_id = result.lastrowid
+
+                    # If lastrowid is 0 - new genre wasn't added, it's
+                    # necessary to find already existing id of a genre
+                    if genre_id == 0:
+                        genre_id = db_conn.execute(
+                            sqlalchemy.text(select_movie_genre_id_gcp),
+                            parameters={"name": genre}
+                        ).fetchone()[0]
+
                     db_conn.execute(
                         sqlalchemy.text(add_movie_genre_gcp), 
-                        parameters={"movie_id": movie_id, "genre": genre}
+                        parameters={"movie_id": movie_id, "genre_id": genre_id}
                     )    
 
             db_conn.commit()
